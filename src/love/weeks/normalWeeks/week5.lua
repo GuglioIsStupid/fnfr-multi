@@ -66,7 +66,26 @@ return {
 			icons = love.filesystem.load("sprites/icons.lua"),
 			numbers = love.filesystem.load("sprites/numbers.lua")
 		}
+		
+		girlfriend = love.filesystem.load("sprites/characters/girlfriend.lua")()
+		boyfriend = love.filesystem.load("sprites/characters/boyfriend/boyfriend.lua")()
 
+		rating = love.filesystem.load("sprites/rating.lua")()
+		rating2 = love.filesystem.load("sprites/rating.lua")()
+
+		rating.sizeX, rating.sizeY = 0.75, 0.75
+		rating2.sizeX, rating2.sizeY = 0.75, 0.75
+
+		numbers = {}
+		numbers2 = {}
+
+		for i = 1, 3 do
+			numbers[i] = sprites.numbers()
+			numbers[i].sizeX, numbers[i].sizeY = 0.5, 0.5
+
+			numbers2[i] = sprites.numbers()
+			numbers2[i].sizeX, numbers2[i].sizeY = 0.5, 0.5
+		end
 		song = songNum
 		difficulty = songAppend
 
@@ -102,8 +121,6 @@ return {
 			enemy = love.filesystem.load("sprites/characters/enemy/boyfriend-christmas.lua")()
 		end
 
-		rating = love.filesystem.load("sprites/rating.lua")()
-
 		if player2 == "pico" then
 			enemy.x, enemy.y = -480, 620
 			enemy.sizeX = -1 -- Reverse, reverse!
@@ -137,16 +154,6 @@ return {
 		end
 
 		girlfriend.x, girlfriend.y = -50, 410
-		--enemy.x, enemy.y = -780, 410
-		--boyfriend.x, boyfriend.y = 300, 620
-
-		rating.sizeX, rating.sizeY = 0.75, 0.75
-		numbers = {}
-		for i = 1, 3 do
-			numbers[i] = sprites.numbers()
-
-			numbers[i].sizeX, numbers[i].sizeY = 0.5, 0.5
-		end
 
 		enemyIcon = sprites.icons()
 		boyfriendIcon = sprites.icons()

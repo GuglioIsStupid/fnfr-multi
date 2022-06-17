@@ -63,6 +63,25 @@ return {
 			numbers = love.filesystem.load("sprites/numbers.lua")
 		}
 
+		
+
+		girlfriend = love.filesystem.load("sprites/characters/girlfriend.lua")()
+		boyfriend = love.filesystem.load("sprites/characters/boyfriend/boyfriend.lua")()
+
+		rating = love.filesystem.load("sprites/rating.lua")()
+		rating2 = love.filesystem.load("sprites/rating.lua")()
+
+		numbers = {}
+		numbers2 = {}
+
+		for i = 1, 3 do
+			numbers[i] = sprites.numbers()
+			numbers[i].sizeX, numbers[i].sizeY = 0.5, 0.5
+
+			numbers2[i] = sprites.numbers()
+			numbers2[i].sizeX, numbers2[i].sizeY = 0.5, 0.5
+		end
+
 		song = songNum
 		difficulty = songAppend
 
@@ -123,16 +142,6 @@ return {
 		limoDancer.y = -130
 		girlfriend.x, girlfriend.y = 30, -50
 		limo.y = 375
-
-		rating = love.filesystem.load("sprites/rating.lua")()
-
-		rating.sizeX, rating.sizeY = 0.75, 0.75
-		numbers = {}
-		for i = 1, 3 do
-			numbers[i] = sprites.numbers()
-
-			numbers[i].sizeX, numbers[i].sizeY = 0.5, 0.5
-		end
 
 		enemyIcon = sprites.icons()
 		boyfriendIcon = sprites.icons()

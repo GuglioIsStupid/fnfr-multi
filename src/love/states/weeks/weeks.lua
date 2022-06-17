@@ -39,6 +39,7 @@ local inputList2 = {
 }
 
 local ratingTimers = {}
+local rating2Timers = {}
 
 local useAltAnims
 local notMissed = {}
@@ -63,10 +64,12 @@ return {
 		images = {
 			icons = love.graphics.newImage(graphics.imagePath("icons")),
 			notes = love.graphics.newImage(graphics.imagePath("notes")),
+			numbers = love.graphics.newImage(graphics.imagePath("numbers"))
 		}
 
 		sprites = {
 			icons = love.filesystem.load("sprites/icons.lua"),
+			numbers = love.filesystem.load("sprites/numbers.lua")
 		}
 
 		
@@ -75,8 +78,21 @@ return {
 		boyfriend = love.filesystem.load("sprites/characters/boyfriend/boyfriend.lua")()
 
 		rating = love.filesystem.load("sprites/rating.lua")()
+		rating2 = love.filesystem.load("sprites/rating.lua")()
 
 		rating.sizeX, rating.sizeY = 0.75, 0.75
+		rating2.sizeX, rating2.sizeY = 0.75, 0.75
+
+		numbers = {}
+		numbers2 = {}
+
+		for i = 1, 3 do
+			numbers[i] = sprites.numbers()
+			numbers[i].sizeX, numbers[i].sizeY = 0.5, 0.5
+
+			numbers2[i] = sprites.numbers()
+			numbers2[i].sizeX, numbers2[i].sizeY = 0.5, 0.5
+		end
 
 		enemyIcon = sprites.icons()
 		boyfriendIcon = sprites.icons()
@@ -104,9 +120,21 @@ return {
 
 		cam.x, cam.y = -boyfriend.x + 100, -boyfriend.y + 75
 
-		rating.x = girlfriend.x
+		rating.x = girlfriend.x + 120
+		rating2.x = girlfriend.x - 120
+
+		rating.sizeX, rating.sizeY = 0.75, 0.75
+		rating2.sizeX, rating2.sizeY = 0.75, 0.75
+
+		for i = 1, 3 do
+			numbers[i].x = girlfriend.x - 100 + 50 * i + 120
+			numbers2[i].x = girlfriend.x - 100 + 50 * i - 120
+		end
 
 		ratingVisibility = {0}
+		rating2Visibility = {0}
+		combo = 0
+		combo2 = 0
 
 		enemy:animate("idle")
 		boyfriend:animate("idle")
@@ -675,6 +703,8 @@ return {
 
 					notMissed[noteNum] = false
 
+					combo2 = 0
+
 					table.remove(enemyNote, 1)
 					health = health + 2
 
@@ -686,6 +716,8 @@ return {
 					if inst then voices:setVolume(0) end
 
 					notMissed[noteNum] = false
+
+					combo = 0
 
 					table.remove(boyfriendNote, 1)
 					health = health - 2
@@ -707,7 +739,7 @@ return {
 						if enemyNote[i] and enemyNote[i]:getAnimName() == "on" then
 							if (not settings.downscroll and enemyNote[i].y - musicPos <= -280) or (settings.downscroll and enemyNote[i].y - musicPos >= 280) then
 								local notePos
-								local ratingAnim
+								local rating2Anim
 
 								notMissed[noteNum] = true
 
@@ -720,13 +752,13 @@ return {
 								voices:setVolume(1)
 
 								if notePos <= 35 then -- "Sick"
-									ratingAnim = "sick"
+									rating2Anim = "sick"
 									score2 = score2 + 350
 								elseif notePos <= 75 then -- "Good"
-									ratingAnim = "good"
+									rating2Anim = "good"
 									score2 = score2 + 200
 								elseif notePos <= 95 then -- "Bad"
-									ratingAnim = "bad"
+									rating2Anim = "bad"
 									score2 = score2 + 100
 								else -- "Shit"
 									if settings.kadeInput then
@@ -734,20 +766,31 @@ return {
 									else
 										score2 = score2 + 50
 									end
-									ratingAnim = "shit"
+									rating2Anim = "shit"
 								end
 
-								rating:animate(ratingAnim, false)
+								combo2 = combo2 + 1
+
+								rating2:animate(rating2Anim, false)
+								numbers2[1]:animate(tostring(math.floor(combo2 / 100 % 10), false))
+								numbers2[2]:animate(tostring(math.floor(combo2 / 10 % 10), false))
+								numbers2[3]:animate(tostring(math.floor(combo2 % 10), false))
 
 								for i = 1, 5 do
-									if ratingTimers[i] then Timer.cancel(ratingTimers[i]) end
+									if rating2Timers[i] then Timer.cancel(rating2Timers[i]) end
 								end
 
-								ratingVisibility[1] = 1
-								rating.y = girlfriend.y - 50
+								rating2Visibility[1] = 1
+								rating2.y = girlfriend.y - 50
+								for i = 1, 3 do
+									numbers2[i].y = girlfriend.y + 50
+								end
 
-								ratingTimers[1] = Timer.tween(2, ratingVisibility, {0})
-								ratingTimers[2] = Timer.tween(2, rating, {y = girlfriend.y - 100}, "out-elastic")
+								rating2Timers[1] = Timer.tween(2, rating2Visibility, {0})
+								rating2Timers[2] = Timer.tween(2, rating2, {y = girlfriend.y - 100}, "out-elastic")
+								rating2Timers[3] = Timer.tween(2, numbers2[1], {y = girlfriend.y + love.math.random(-10, 10)}, "out-elastic")
+								rating2Timers[4] = Timer.tween(2, numbers2[2], {y = girlfriend.y + love.math.random(-10, 10)}, "out-elastic")
+								rating2Timers[5] = Timer.tween(2, numbers2[3], {y = girlfriend.y + love.math.random(-10, 10)}, "out-elastic")
 
 								table.remove(enemyNote, i)
 
@@ -771,6 +814,8 @@ return {
 				end
 				if not success then
 					audio.playSound(sounds.miss[love.math.random(3)])
+
+					combo2 = 0
 
 					notMissed[noteNum] = false
 					score2 = score2 - 10
@@ -823,7 +868,12 @@ return {
 									ratingAnim = "shit"
 								end
 
+								combo = combo + 1
+
 								rating:animate(ratingAnim, false)
+								numbers[1]:animate(tostring(math.floor(combo / 100 % 10), false))
+								numbers[2]:animate(tostring(math.floor(combo / 10 % 10), false))
+								numbers[3]:animate(tostring(math.floor(combo % 10), false))
 
 								for i = 1, 5 do
 									if ratingTimers[i] then Timer.cancel(ratingTimers[i]) end
@@ -831,10 +881,16 @@ return {
 
 								ratingVisibility[1] = 1
 								rating.y = girlfriend.y - 50
+								for i = 1, 3 do
+									numbers[i].y = girlfriend.y + 50
+								end
 
 
 								ratingTimers[1] = Timer.tween(2, ratingVisibility, {0})
 								ratingTimers[2] = Timer.tween(2, rating, {y = girlfriend.y - 100}, "out-elastic")
+								ratingTimers[3] = Timer.tween(2, numbers[1], {y = girlfriend.y + love.math.random(-10, 10)}, "out-elastic")
+								ratingTimers[4] = Timer.tween(2, numbers[2], {y = girlfriend.y + love.math.random(-10, 10)}, "out-elastic")
+								ratingTimers[5] = Timer.tween(2, numbers[3], {y = girlfriend.y + love.math.random(-10, 10)}, "out-elastic")
 
 
 								table.remove(boyfriendNote, i)
@@ -857,6 +913,8 @@ return {
 
 				if not success then
 					audio.playSound(sounds.miss[love.math.random(3)])
+
+					combo = 0
 
 					notMissed[noteNum] = false
 					score = score - 10
@@ -944,7 +1002,17 @@ return {
 
 			graphics.setColor(1, 1, 1, ratingVisibility[1])
 			rating:draw()
+			for i = 1, 3 do
+				numbers[i]:draw()
+			end
+			graphics.setColor(1, 1, 1, rating2Visibility[1])
+			rating2:draw()
+			for i = 1, 3 do
+				numbers2[i]:draw()
+			end
 			graphics.setColor(1, 1, 1)
+			
+
 		love.graphics.pop()
 	end,
 
