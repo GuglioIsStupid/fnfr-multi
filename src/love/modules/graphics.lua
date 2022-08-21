@@ -20,6 +20,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 local imageType = "png"
 local fade = {1}
 local isFading = false
+color = {}
 
 local fadeTimer
 
@@ -99,6 +100,88 @@ return {
 					self.shearX,
 					self.shearY
 				)
+			end,
+
+			udraw = function(self,sizeX,sizeY) -- auto upscale pixel images
+				local x = self.x
+				local y = self.y
+				local sizeX, sizeY = sizeX or 7, sizeY or 7
+
+				if options and options.floored then
+					x = math.floor(x)
+					y = math.floor(y)
+				end
+
+				love.graphics.draw(
+					image,
+					self.x,
+					self.y,
+					self.orientation,
+					sizeX,
+					sizeY,
+					math.floor(width / 2) + self.offsetX,
+					math.floor(height / 2) + self.offsetY,
+					self.shearX,
+					self.shearY
+				)
+			end,
+
+			cdraw = function(self,R,G,B,A)
+				local R = R or 255
+				local G = G or 255
+				local B = B or 255
+				local A = A or 1
+				love.graphics.setColorF(R,G,B,A)
+				local x = self.x
+				local y = self.y
+
+				if options and options.floored then
+					x = math.floor(x)
+					y = math.floor(y)
+				end
+
+				love.graphics.draw(
+					image,
+					self.x,
+					self.y,
+					self.orientation,
+					self.sizeX,
+					self.sizeY,
+					math.floor(width / 2) + self.offsetX,
+					math.floor(height / 2) + self.offsetY,
+					self.shearX,
+					self.shearY
+				)
+				love.graphics.setColor(1,1,1,1)
+			end,
+			
+			cudraw = function(self,R,G,B,A,sizeX,sizeY) -- Colour draw for pixel assets
+				local R = R or 255
+				local G = G or 255
+				local B = B or 255
+				local A = A or 1
+				love.graphics.setColorF(R,G,B,A)
+				local x = self.x
+				local y = self.y
+				local sizeX, sizeY = sizeX or 7, sizeY or 7
+
+				if options and options.floored then
+					x = math.floor(x)
+					y = math.floor(y)
+				end
+				love.graphics.draw(
+					image,
+					self.x,
+					self.y,
+					self.orientation,
+					sizeX,
+					sizeY,
+					math.floor(width / 2) + self.offsetX,
+					math.floor(height / 2) + self.offsetY,
+					self.shearX,
+					self.shearY
+				)
+				love.graphics.setColor(1,1,1,1)
 			end
 		}
 
@@ -151,23 +234,34 @@ return {
 			end,
 
 			animate = function(self, animName, loopAnim)
-				anim.name = animName
-				anim.start = anims[animName].start
-				anim.stop = anims[animName].stop
-				anim.speed = anims[animName].speed
-				anim.offsetX = anims[animName].offsetX
-				anim.offsetY = anims[animName].offsetY
+				if self:isAnimName(animName) then
+					anim.name = animName
+					anim.start = anims[animName].start
+					anim.stop = anims[animName].stop
+					anim.speed = anims[animName].speed
+					anim.offsetX = anims[animName].offsetX
+					anim.offsetY = anims[animName].offsetY
 
-				frame = anim.start
-				isLooped = loopAnim
+					frame = anim.start
+					isLooped = loopAnim
 
-				isAnimated = true
+					isAnimated = true
+				else
+					print("Error: " .. animName .. " is not a valid animation name.")
+				end
 			end,
 			getAnims = function(self)
 				return anims
 			end,
 			getAnimName = function(self)
 				return anim.name
+			end,
+			isAnimName = function(self, animName)
+				if anims[animName] then
+					return true
+				else
+					return false
+				end
 			end,
 			setAnimSpeed = function(self, speed)
 				anim.speed = speed
@@ -247,6 +341,170 @@ return {
 						self.shearY
 					)
 				end
+			end,
+
+			udraw = function(self,sizeX, sizeY)
+				local flooredFrame = math.floor(frame)
+				local sizeX, sizeY = sizeX or 7, sizeY or 7
+
+				if flooredFrame <= anim.stop then
+					local x = self.x
+					local y = self.y
+					local width
+					local height
+
+					if options and options.floored then
+						x = math.floor(x)
+						y = math.floor(y)
+					end
+
+					if options and options.noOffset then
+						if frameData[flooredFrame].offsetWidth ~= 0 then
+							width = frameData[flooredFrame].offsetX
+						end
+						if frameData[flooredFrame].offsetHeight ~= 0 then
+							height = frameData[flooredFrame].offsetY
+						end
+					else
+						if frameData[flooredFrame].offsetWidth == 0 then
+							width = math.floor(frameData[flooredFrame].width / 2)
+						else
+							width = math.floor(frameData[flooredFrame].offsetWidth / 2) + frameData[flooredFrame].offsetX
+						end
+						if frameData[flooredFrame].offsetHeight == 0 then
+							height = math.floor(frameData[flooredFrame].height / 2)
+						else
+							height = math.floor(frameData[flooredFrame].offsetHeight / 2) + frameData[flooredFrame].offsetY
+						end
+					end
+
+					love.graphics.draw(
+						sheet,
+						frames[flooredFrame],
+						x,
+						y,
+						self.orientation,
+						sizeX,
+						sizeY,
+						width + anim.offsetX + self.offsetX,
+						height + anim.offsetY + self.offsetY,
+						self.shearX,
+						self.shearY
+					)
+				end
+			end,
+
+			cdraw = function(self,R,G,B,A)
+				local R = R or 255
+				local G = G or 255
+				local B = B or 255
+				local A = A or 1
+				love.graphics.setColorF(R,G,B,A)
+				local flooredFrame = math.floor(frame)
+
+				if flooredFrame <= anim.stop then
+					local x = self.x
+					local y = self.y
+					local width
+					local height
+
+					if options and options.floored then
+						x = math.floor(x)
+						y = math.floor(y)
+					end
+
+					if options and options.noOffset then
+						if frameData[flooredFrame].offsetWidth ~= 0 then
+							width = frameData[flooredFrame].offsetX
+						end
+						if frameData[flooredFrame].offsetHeight ~= 0 then
+							height = frameData[flooredFrame].offsetY
+						end
+					else
+						if frameData[flooredFrame].offsetWidth == 0 then
+							width = math.floor(frameData[flooredFrame].width / 2)
+						else
+							width = math.floor(frameData[flooredFrame].offsetWidth / 2) + frameData[flooredFrame].offsetX
+						end
+						if frameData[flooredFrame].offsetHeight == 0 then
+							height = math.floor(frameData[flooredFrame].height / 2)
+						else
+							height = math.floor(frameData[flooredFrame].offsetHeight / 2) + frameData[flooredFrame].offsetY
+						end
+					end
+
+					love.graphics.draw(
+						sheet,
+						frames[flooredFrame],
+						x,
+						y,
+						self.orientation,
+						self.sizeX,
+						self.sizeY,
+						width + anim.offsetX + self.offsetX,
+						height + anim.offsetY + self.offsetY,
+						self.shearX,
+						self.shearY
+					)
+				end
+				love.graphics.setColor(1,1,1,1)
+			end,
+			
+			cudraw = function(self,R,G,B,A,sizeX,sizeY) -- Colour draw for pixel assets
+				local R = R or 255
+				local G = G or 255
+				local B = B or 255
+				local A = A or 1
+				love.graphics.setColorF(R,G,B,A)
+				local flooredFrame = math.floor(frame)
+				local sizeX, sizeY = sizeX or 7, sizeY or 7
+
+				if flooredFrame <= anim.stop then
+					local x = self.x
+					local y = self.y
+					local width
+					local height
+
+					if options and options.floored then
+						x = math.floor(x)
+						y = math.floor(y)
+					end
+
+					if options and options.noOffset then
+						if frameData[flooredFrame].offsetWidth ~= 0 then
+							width = frameData[flooredFrame].offsetX
+						end
+						if frameData[flooredFrame].offsetHeight ~= 0 then
+							height = frameData[flooredFrame].offsetY
+						end
+					else
+						if frameData[flooredFrame].offsetWidth == 0 then
+							width = math.floor(frameData[flooredFrame].width / 2)
+						else
+							width = math.floor(frameData[flooredFrame].offsetWidth / 2) + frameData[flooredFrame].offsetX
+						end
+						if frameData[flooredFrame].offsetHeight == 0 then
+							height = math.floor(frameData[flooredFrame].height / 2)
+						else
+							height = math.floor(frameData[flooredFrame].offsetHeight / 2) + frameData[flooredFrame].offsetY
+						end
+					end
+
+					love.graphics.draw(
+						sheet,
+						frames[flooredFrame],
+						x,
+						y,
+						self.orientation,
+						sizeX,
+						sizeY,
+						width + anim.offsetX + self.offsetX,
+						height + anim.offsetY + self.offsetY,
+						self.shearX,
+						self.shearY
+					)
+				end
+				love.graphics.setColor(1,1,1,1)
 			end
 		}
 
@@ -336,6 +594,11 @@ return {
 		local fade = fade[1]
 
 		love.graphics.setColor(fade * r, fade * g, fade * b, a)
+	end,
+	setColorF = function(r, g, b, a)
+		local fade = fade[1]
+
+		love.graphics.setColor(fade * (r/255), fade * (g/255), fade * (b/255), a)
 	end,
 	setBackgroundColor = function(r, g, b, a)
 		local fade = fade[1]

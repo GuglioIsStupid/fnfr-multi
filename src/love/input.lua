@@ -16,37 +16,13 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ------------------------------------------------------------------------------]]
-
-local gameLeft
-local gameDown
-local gameUp
-local gameRight
-
+-- Add custom keybinds/new controls here
+-- set these as a defualt so no crashing
+customBindLeft = "a"
+customBindRight = "d"
+customBindUp = "w"
+customBindDown = "s"
 if love.system.getOS() == "NX" then
-	if settings.kBinds then
-		-- Boyfriend
-		gameLeft = {"button:x", "key:j"}
-		gameDown = {"button:a", "key:k"}
-		gameUp = {"button:y", "key:l"}
-		gameRight = {"button:b", "key:;"}
-		-- Enemy
-		gameLeft2 = {"button:dpleft", "key:a"}
-		gameDown2 = {"button:dpdown", "key:s"}
-		gameUp2 = {"button:dpup", "key:d"}
-		gameRight2 = {"button:dpright", "key:f"}
-	else
-		-- Boyfriend
-		gameLeft = {"key:j", "button:x"}
-		gameDown = {"key:k", "button:a"}
-		gameUp = {"key:l", "button:y"}
-		gameRight = {"key:;", "button:b"}
-		-- Enemy
-		gameLeft2 = {"key:a", "button:dpleft"}
-		gameDown2 = {"key:s", "button:dpdown"}
-		gameUp2 = {"key:d", "button:dpup"}
-		gameRight2 = {"key:f", "button:dpright"}
-	end
-
 	return baton.new {
 		controls = {
 			left = {"axis:leftx-", "button:dpleft", "key:left"},
@@ -55,46 +31,24 @@ if love.system.getOS() == "NX" then
 			right = {"axis:leftx+", "button:dpright", "key:right"},
 			confirm = {"button:b", "key:return"},
 			back = {"button:a", "key:escape"},
+			debugZoomOut = {"key:["},
+			debugZoomIn = {"key:]"},
+			pause = {"key:p"},
 
-			gameLeft = gameLeft,
-			gameDown = gameDown,
-			gameUp = gameUp,
-			gameRight = gameRight,
+			gameLeftB = {"key:left"},
+			gameDownB = {"key:down"},
+			gameUpB = {"key:up"},
+			gameRightB = {"key:right"},
 
-			gameLeft2 = gameLeft2,
-			gameDown2 = gameDown2,
-			gameUp2 = gameUp2,
-			gameRight2 = gameRight2,
+			gameLeftE = {"key:a"},
+			gameDownE = {"key:s"},
+			gameUpE = {"key:w"},
+			gameRightE = {"key:d"},
 			gameBack = {"button:start", "key:escape"},
 		},
 		joystick = love.joystick.getJoysticks()[1]
 	}
 else
-	if settings.kBinds then
-		-- Boyfriend
-		gameLeft = {"key:j", "button:x"}
-		gameDown = {"key:k", "button:a"}
-		gameUp = {"key:l", "button:y"}
-		gameRight = {"key:;", "button:b"}
-		-- Enemy
-		gameLeft2 = {"key:a", "button:dpleft"}
-		gameDown2 = {"key:s", "button:dpdown"}
-		gameUp2 = {"key:d", "button:dpup"}
-		gameRight2 = {"key:f", "button:dpright"}
-	else
-		-- Boyfriend
-		gameLeft = {"key:left", "button:x"}
-		gameDown = {"key:down", "button:a"}
-		gameUp = {"key:up", "button:y"}
-		gameRight = {"key:right", "button:b"}
-		-- Enemy
-		gameLeft2 = {"key:a", "button:dpleft"}
-		gameDown2 = {"key:s", "button:dpdown"}
-		gameUp2 = {"key:w", "button:dpup"}
-		gameRight2 = {"key:d", "button:dpright"}
-	end
-	
-
 	return baton.new {
 		controls = {
 			left = {"key:left", "axis:leftx-", "button:dpleft"},
@@ -103,16 +57,19 @@ else
 			right = {"key:right", "axis:leftx+", "button:dpright"},
 			confirm = {"key:return", "button:a"},
 			back = {"key:escape", "button:b"},
+			debugZoomOut = {"key:["},
+			debugZoomIn = {"key:]"},
+			pause = {"key:p"},
 
-			gameLeft = gameLeft,
-			gameDown = gameDown,
-			gameUp = gameUp,
-			gameRight = gameRight,
-
-			gameLeft2 = gameLeft2,
-			gameDown2 = gameDown2,
-			gameUp2 = gameUp2,
-			gameRight2 = gameRight2,
+			gameLeftB = {"key:left"},
+			gameDownB = {"key:down"},
+			gameUpB = {"key:up"},
+			gameRightB = {"key:right"},
+			
+			gameLeftE = {"key:a"},
+			gameDownE = {"key:s"},
+			gameUpE = {"key:w"},
+			gameRightE = {"key:d"},
 			gameBack = {"key:escape", "button:start"},
 		},
 		joystick = love.joystick.getJoysticks()[1]

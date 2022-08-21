@@ -23,46 +23,69 @@ local menuState
 
 local menuNum = 1
 
-local weekNum = 1
 local songNum, songAppend
 local songDifficulty = 2
-
-local logo = graphics.newImage(love.graphics.newImage(graphics.imagePath("menu/logo")))
-
-local girlfriendTitle = love.filesystem.load("sprites/menu/girlfriend-title.lua")()
-local titleEnter = love.filesystem.load("sprites/menu/titleEnter.lua")()
 
 local selectSound = love.audio.newSource("sounds/menu/select.ogg", "static")
 local confirmSound = love.audio.newSource("sounds/menu/confirm.ogg", "static")
 
-local music = love.audio.newSource("music/menu/menu.ogg", "stream")
+music = love.audio.newSource("songs/misc/menu.ogg", "stream")
 
 local function switchMenu(menu)
-		function confirmFunc()
-            status.setLoading(true)
-			Gamestate.switch(menuSelect)
-            status.setLoading(false)
-		end
-		function backFunc()
-			graphics.fadeOut(0.5, love.event.quit)
-		end
+	function backFunc()
+		graphics.fadeOut(0.5, love.event.quit)
+	end
 
 	menuState = 1
 end
-
-
-
-logo.x, logo.y = -350, -125
-
-girlfriendTitle.x, girlfriendTitle.y = 325, 65
-
-titleEnter.x, titleEnter.y = 225, 350
 
 music:setLooping(true)
 
 return {
 	enter = function(self, previous)
-        titleEnter:animate("anim", true)
+
+		function tweenMenu()
+			if logo.y == -300 then 
+				Timer.tween(1, logo, {y = -125}, "out-expo")
+			end
+			if titleEnter.y == 450 then 
+				Timer.tween(1, titleEnter, {y = 350}, "out-expo")
+			end
+			if girlfriendTitle.x == 500 then
+				Timer.tween(1, girlfriendTitle, {x = 400}, "out-expo")
+			end
+		end
+
+		function logoRotate()
+			Timer.tween(2, logo, {orientation = 0.15}, "in-out-back", function()
+				Timer.tween(2, logo, {orientation = -0.15}, "in-out-back", function()
+					logoRotate()
+				end)
+			end)
+		end
+		menuBPM = 102
+		changingMenu = false
+		logo = love.filesystem.load("sprites/menu/ve-logo.lua")()
+		girlfriendTitle = love.filesystem.load("sprites/menu/girlfriend-title.lua")()
+		titleEnter = love.filesystem.load("sprites/menu/titleEnter.lua")()
+
+		whiteRectangles = {}
+		for i = 1, 15 do
+			table.insert(whiteRectangles, graphics.newImage(love.graphics.newImage(graphics.imagePath("menu/whiteRectangle"))))
+			whiteRectangles[i].x = -780 + 100*i
+			whiteRectangles[i].y = -1000
+		end
+
+		girlfriendTitle.x, girlfriendTitle.y = 500, 65
+		titleEnter.x, titleEnter.y = 225, 450
+		logo.x, logo.y = -350, -300
+
+		logoRotate()
+		tweenMenu()
+
+		girlfriendTitle.x, girlfriendTitle.y = 325, 65
+
+		titleEnter.x, titleEnter.y = 225, 350
 		songNum = 0
 
 		cam.sizeX, cam.sizeY = 0.9, 0.9
@@ -73,6 +96,16 @@ return {
 		graphics.setFade(0)
 		graphics.fadeIn(0.5)
 
+		if useDiscordRPC then
+			presence = {
+				state = "Press Enter", 
+				details = "In the Menu",
+				largeImageKey = "logo",
+				startTimestamp = now,
+			}
+			nextPresenceUpdate = 0
+		end
+
 		music:play()
 	end,
 
@@ -80,19 +113,33 @@ return {
 		music:stop()
 	end,
 
+	musicVolumeLower = function(self)
+		music:setVolume(0.4)
+	end,
+
 	update = function(self, dt)
 		girlfriendTitle:update(dt)
 		titleEnter:update(dt)
-		--titleEnter:animate("anim", true)
+		logo:update(dt)
 
 		if not graphics.isFading() then
 			if input:pressed("confirm") then
-				audio.playSound(confirmSound)
-
-				titleEnter:animate("pressed", false)
-
-
-				confirmFunc()
+				
+				if not changingMenu then
+					titleEnter:animate("pressed", true)
+					audio.playSound(confirmSound)
+					changingMenu = true
+					for i = 1, 15 do
+						Timer.tween(0.5 + 0.1 + 0.03*i, whiteRectangles[i], {y = 0}, "linear",
+							function()
+								if i == 15 then
+									Gamestate.switch(menuSelect)
+									status.setLoading(false)
+								end
+							end
+						)
+					end
+				end
 			elseif input:pressed("back") then
 				audio.playSound(selectSound)
 
@@ -113,12 +160,33 @@ return {
 				girlfriendTitle:draw()
 				titleEnter:draw()
 
-				love.graphics.pop()
+				--love.graphics.setColor(1, 63 / 255, 172 / 255, 0.9)
+				love.graphics.setColor(0, 0, 0, 0.9)
+				for i = 1, 15 do
+					whiteRectangles[i]:draw()
+				end
+				love.graphics.setColor(1, 1, 1)
+
+				love.graphics.printf(
+					"This is a pre-release build.\n\n"..
+					"Please report any bugs you find.",
+					-525,
+					90,
+					1200,
+					"left",
+					nil,
+					1.6,
+					1.6
+				)
+
+			love.graphics.pop()
 		love.graphics.pop()
 	end,
 
 	leave = function(self)
-		--music:stop()
+		girlfriendTitle = nil
+		titleEnter = nil
+		logo = nil
 
 		Timer.clear()
 	end
