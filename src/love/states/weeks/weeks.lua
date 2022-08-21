@@ -1567,7 +1567,7 @@ return {
 
 						if (not enemy:isAnimated()) or enemy:getAnimName() == "idle" then self:safeAnimate(enemy, curAnim, true, 3) end
 
-						health = health + 1
+						health = health - 1
 					end
 
 					if input:released(curInput2) then
