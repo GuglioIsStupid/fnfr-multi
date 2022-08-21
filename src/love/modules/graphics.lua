@@ -40,6 +40,7 @@ return {
 	imagePath = function(path)
 		local pathStr = "images/" .. imageType .. "/" .. path .. "." .. imageType
 
+		--[[
 		if love.filesystem.getInfo(pathStr) then
 			return pathStr
 		else
@@ -47,6 +48,20 @@ return {
 				return "images/png/" .. path .. ".png"
 			else
 				return "mods/" .. mods.modNames[modWeekNum] .. "/images/png/" .. path .. ".png"
+			end
+		end
+		--]]
+		if love.filesystem.getInfo("images/dds/" .. path .. ".dds") then
+			return "images/dds/" .. path .. ".dds"
+		else
+			if love.filesystem.getInfo("images/png/" .. path .. ".png") then
+				return "images/png/" .. path .. ".png"
+			else
+				if love.filesystem.getInfo("mods/" .. mods.modNames[modWeekNum] .. "/images/dds/" .. path .. ".dds") then
+					return "mods/" .. mods.modNames[modWeekNum] .. "/images/dds/" .. path .. ".dds"
+				else
+					return "mods/" .. mods.modNames[modWeekNum] .. "/images/png/" .. path .. ".png"
+				end
 			end
 		end
 	end,
