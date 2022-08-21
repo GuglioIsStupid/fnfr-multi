@@ -171,7 +171,11 @@ return {
                     graphics.fadeOut(
                         0.3,
                         function()
-                            Gamestate.switch(menuFreeplay)
+                            if mods.weekMeta[1] then
+                                Gamestate.switch(menuChooseFreeplay)
+                            else
+                                Gamestate.switch(menuFreeplay)
+                            end
                             status.setLoading(false)
                         end
 	            	)

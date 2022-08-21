@@ -82,12 +82,13 @@ function love.load()
 	}
 	-- Load mod loader
 	mods = {
-		weekMeta = {}
+		weekMeta = {},
+		modNames = {}
 	}
 	modWeekData = {}
 	modloader = require "modfolder.loader"
 	playModMenu = require "modfolder.playmod"
-	--modloader:loadMods()
+	modloader:loadMods()
 
 	-- Load menus
 	menu = require "states.menu.menu"
@@ -95,6 +96,7 @@ function love.load()
 	menuSelect = require "states.menu.menuSelect"
 	menuFreeplay = require "states.menu.menuFreeplay"
 	menuSettings = require "states.menu.menuSettings"
+	menuChooseFreeplay = require "states.menu.menuChooseFreeplay"
 
 	-- Load weeks
 	weeks = require "states.weeks.weeks"

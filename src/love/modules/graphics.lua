@@ -43,7 +43,11 @@ return {
 		if love.filesystem.getInfo(pathStr) then
 			return pathStr
 		else
-			return "images/png/" .. path .. ".png"
+			if love.filesystem.getInfo("images/png/" .. path .. ".png") then
+				return "images/png/" .. path .. ".png"
+			else
+				return "mods/" .. mods.modNames[modWeekNum] .. "/images/png/" .. path .. ".png"
+			end
 		end
 	end,
 	setImageType = function(type)

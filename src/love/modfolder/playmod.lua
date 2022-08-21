@@ -44,6 +44,10 @@ local confirmSound = love.audio.newSource("sounds/menu/confirm.ogg", "static")
 
 
 local function switchMenu(menu)
+	print(mods.weekMeta)
+	for i = 1, #modWeekData do
+		print(modWeekData[i])
+	end
 	function upFunc()
 		if pressedUp ~= 10 then
 			pressedUp = pressedUp + 1
@@ -62,17 +66,17 @@ local function switchMenu(menu)
 			if menuState == 3 then
 				songDifficulty = (songDifficulty > 1) and songDifficulty - 1 or 3
 			elseif menuState == 2 then
-				songNum = (songNum > 1) and songNum - 1 or #mods.weekMeta[weekNum][2]
+				songNum = (songNum > 1) and songNum - 1 or #mods.weekMeta[modWeekNum][2]
 			else
-				weekNum = (weekNum > 1) and weekNum - 1 or #mods.weekMeta
+				modWeekNum = (modWeekNum > 1) and modWeekNum - 1 or #mods.weekMeta
 			end
 			Timer.tween(
 				0.2,
 				freeColour, 
 				{
-					[1] = freeplayColours[weekNum][1],
-					[2] = freeplayColours[weekNum][2],
-					[3] = freeplayColours[weekNum][3]
+					[1] = freeplayColours[modWeekNum][1],
+					[2] = freeplayColours[modWeekNum][2],
+					[3] = freeplayColours[modWeekNum][3]
 				}, 
 				"linear"
 			)
@@ -81,17 +85,17 @@ local function switchMenu(menu)
 			if menuState == 3 then
 				songDifficulty = (songDifficulty < 3) and songDifficulty + 1 or 1
 			elseif menuState == 2 then
-				songNum = (songNum < #mods.weekMeta[weekNum][2]) and songNum + 1 or 1
+				songNum = (songNum < #mods.weekMeta[modWeekNum][2]) and songNum + 1 or 1
 			else
-				weekNum = (weekNum < #mods.weekMeta) and weekNum + 1 or 1
+				modWeekNum = (modWeekNum < #mods.weekMeta) and modWeekNum + 1 or 1
 			end
 			Timer.tween(
 				0.2,
 				freeColour, 
 				{
-					[1] = freeplayColours[weekNum][1],
-					[2] = freeplayColours[weekNum][2],
-					[3] = freeplayColours[weekNum][3]
+					[1] = freeplayColours[modWeekNum][1],
+					[2] = freeplayColours[modWeekNum][2],
+					[3] = freeplayColours[modWeekNum][3]
 				}, 
 				"linear"
 			)
@@ -111,7 +115,7 @@ local function switchMenu(menu)
 
 							menu:musicStop()
 
-							Gamestate.switch(modWeekData[weekNum], songNum, songAppend)
+							Gamestate.switch(modWeekData[modWeekNum], songNum, songAppend)
 
 							status.setLoading(false)
 						end
@@ -162,9 +166,9 @@ local function switchMenu(menu)
 					love.graphics.printf("Choose a difficulty: < Easy >", -640, 285, 853, "center", nil, 1.5, 1.5)
 				end
 			elseif menuState == 2 then
-				love.graphics.printf("Choose a song: < " .. mods.weekMeta[weekNum][2][songNum] .. " >", -640, 285, 853, "center", nil, 1.5, 1.5)
+				love.graphics.printf("Choose a song: < " .. mods.weekMeta[modWeekNum][2][songNum] .. " >", -640, 285, 853, "center", nil, 1.5, 1.5)
 			else
-				love.graphics.printf("Choose a week: < " .. mods.weekMeta[weekNum][1] .. " >", -640, 285, 853, "center", nil, 1.5, 1.5)
+				love.graphics.printf("Choose a week: < " .. mods.weekMeta[modWeekNum][1] .. " >", -640, 285, 853, "center", nil, 1.5, 1.5)
 			end
 			graphics.setColor(1, 1, 1)
 
@@ -187,17 +191,17 @@ function leftFunc()
 	if menuState == 3 then
 		songDifficulty = (songDifficulty > 1) and songDifficulty - 1 or 3
 	elseif menuState == 2 then
-		songNum = (songNum > 1) and songNum - 1 or #mods.weekMeta[weekNum][2]
+		songNum = (songNum > 1) and songNum - 1 or #mods.weekMeta[modWeekNum][2]
 	else
-		weekNum = (weekNum > 1) and weekNum - 1 or #mods.weekMeta
+		modWeekNum = (modWeekNum > 1) and modWeekNum - 1 or #mods.weekMeta
 	end
 	Timer.tween(
 		0.2,
 		freeColour, 
 		{
-			[1] = freeplayColours[weekNum][1],
-			[2] = freeplayColours[weekNum][2],
-			[3] = freeplayColours[weekNum][3]
+			[1] = freeplayColours[modWeekNum][1],
+			[2] = freeplayColours[modWeekNum][2],
+			[3] = freeplayColours[modWeekNum][3]
 		}, 
 		"linear"
 	)
@@ -206,17 +210,17 @@ function rightFunc()
 	if menuState == 3 then
 		songDifficulty = (songDifficulty < 3) and songDifficulty + 1 or 1
 	elseif menuState == 2 then
-		songNum = (songNum < #mods.weekMeta[weekNum][2]) and songNum + 1 or 1
+		songNum = (songNum < #mods.weekMeta[modWeekNum][2]) and songNum + 1 or 1
 	else
-		weekNum = (weekNum < #mods.weekMeta) and weekNum + 1 or 1
+		modWeekNum = (modWeekNum < #mods.weekMeta) and modWeekNum + 1 or 1
 	end
 	Timer.tween(
 		0.2,
 		freeColour, 
 		{
-			[1] = freeplayColours[weekNum][1],
-			[2] = freeplayColours[weekNum][2],
-			[3] = freeplayColours[weekNum][3]
+			[1] = freeplayColours[modWeekNum][1],
+			[2] = freeplayColours[modWeekNum][2],
+			[3] = freeplayColours[modWeekNum][3]
 		}, 
 		"linear"
 	)
@@ -236,7 +240,7 @@ function confirmFunc()
 
 					menu:musicStop()
 
-					Gamestate.switch(modWeekData[weekNum], songNum, songAppend)
+					Gamestate.switch(modWeekData[modWeekNum], songNum, songAppend)
 
 					status.setLoading(false)
 				end
@@ -288,9 +292,9 @@ function drawFunc()
 				love.graphics.printf("Choose a difficulty: < Easy >", -640, 285, 853, "center", nil, 1.5, 1.5)
 			end
 		elseif menuState == 2 then
-			love.graphics.printf("Choose a song: < " .. mods.weekMeta[weekNum][2][songNum] .. " >", -640, 285, 853, "center", nil, 1.5, 1.5)
+			love.graphics.printf("Choose a song: < " .. mods.weekMeta[modWeekNum][2][songNum] .. " >", -640, 285, 853, "center", nil, 1.5, 1.5)
 		else
-			love.graphics.printf("Choose a week: < " .. mods.weekMeta[weekNum][1] .. " >", -640, 285, 853, "center", nil, 1.5, 1.5)
+			love.graphics.printf("Choose a week: < " .. mods.weekMeta[modWeekNum][1] .. " >", -640, 285, 853, "center", nil, 1.5, 1.5)
 		end
 		graphics.setColor(1, 1, 1)
 
@@ -317,7 +321,7 @@ end
 return {
 	enter = function(self, previous)
 		songNum = 0
-		weekNum = 1
+		modWeekNum = 1
 		bf = love.filesystem.load("sprites/boyfriend.lua")()
 		love.graphics.setDefaultFilter("nearest")
 		pbf = love.filesystem.load("sprites/pixel/boyfriend.lua")()
