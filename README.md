@@ -1,5 +1,5 @@
 # ![Logo](images/logo.png)
-[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/VanillaEngineDevs/Vanilla-Engine?style=flat-square)](https://github.com/VanillaEngineDevs/Vanilla-Engine/releases/latest) [![GitHub release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/VanillaEngineDevs/Vanilla-Engine?include_prereleases&style=flat-square)](https://github.com/VanillaEngineDevs/Vanilla-Engine/releases) [![GitHub all releases](https://img.shields.io/github/downloads/VanillaEngineDevs/Vanilla-Engine/total?style=flat-square)](https://github.com/VanillaEngineDevs/Vanilla-Engine/releases) [![GitHub issues](https://img.shields.io/github/issues/VanillaEngineDevs/Vanilla-Engine?style=flat-square)](https://github.com/VanillaEngineDevs/Vanilla-Engine/issues) [![GitHub](https://img.shields.io/github/license/VanillaEngineDevs/Vanilla-Engine?style=flat-square)](https://github.com/VanillaEngineDevs/Vanilla-Engine/blob/main/LICENSE) [![Discord](https://img.shields.io/discord/852658576577003550?style=flat-square)](https://discord.gg/TBF3HkXWhq)
+[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/VanillaEngineDevs/fnfr-multi-ve?style=flat-square)](https://github.com/VanillaEngineDevs/fnfr-multi-ve/releases/latest) [![GitHub release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/VanillaEngineDevs/fnfr-multi-ve?include_prereleases&style=flat-square)](https://github.com/VanillaEngineDevs/fnfr-multi-ve/releases) [![GitHub all releases](https://img.shields.io/github/downloads/VanillaEngineDevs/fnfr-multi-ve/total?style=flat-square)](https://github.com/VanillaEngineDevs/fnfr-multi-ve/releases) [![GitHub issues](https://img.shields.io/github/issues/VanillaEngineDevs/fnfr-multi-ve?style=flat-square)](https://github.com/VanillaEngineDevs/fnfr-multi-ve/issues) [![GitHub](https://img.shields.io/github/license/VanillaEngineDevs/fnfr-multi-ve?style=flat-square)](https://github.com/VanillaEngineDevs/fnfr-multi-ve/blob/main/LICENSE) [![Discord](https://img.shields.io/discord/852658576577003550?style=flat-square)](https://discord.gg/TBF3HkXWhq)
 
 Friday Night Funkin' Rewritten is a rewrite of [Friday Night Funkin'](https://ninja-muffin24.itch.io/funkin) built on [LÖVE](https://love2d.org/) for Windows, macOS, Linux, and Web platforms, as well as previously unsupported platforms, like the Nintendo Switch!
 
@@ -57,18 +57,18 @@ If using a controller on a PC, a controller with an Xbox button layout is recomm
 ### Keyboard
 * 6 - Take screenshot
   * Screenshot paths:
-    * Windows - `%APPDATA%\vanilla-engine\screenshots`
-    * macOS - `~/Library/Application Support/vanilla-engine/screenshots`
-	* Linux - `~/.local/share/love/vanilla-engine/screenshots`
-	* Nintendo Switch - `./vanilla-engine/screenshots`
+    * Windows - `%APPDATA%\fnfr-multi-ve\screenshots`
+    * macOS - `~/Library/Application Support/fnfr-multi-ve/screenshots`
+	* Linux - `~/.local/share/love/fnfr-multi-ve/screenshots`
+	* Nintendo Switch - `./fnfr-multi-ve/screenshots`
 * 7 - Open debug menu
 
 # Settings
 The settings file can be found in the following places on the following systems:
-* Windows - `%APPDATA%\vanilla-engine\settings.ini` & `%APPDATA%\vanilla-engine\settings`
-* macOS - `~/Library/Application Support/vanilla-engine/settings.ini` & `~/Library/Application Support/vanilla-engine/settings`
-* Linux - `~/.local/share/love/vanilla-engine/settings.ini` & `~/.local/share/love/vanilla-engine/settings`
-* Nintendo Switch - `./vanilla-engine/settings.ini` & `./vanilla-engine/settings`
+* Windows - `%APPDATA%\fnfr-multi-ve\settings.ini` & `%APPDATA%\fnfr-multi-ve\settings`
+* macOS - `~/Library/Application Support/fnfr-multi-ve/settings.ini` & `~/Library/Application Support/fnfr-multi-ve/settings`
+* Linux - `~/.local/share/love/fnfr-multi-ve/settings.ini` & `~/.local/share/love/fnfr-multi-ve/settings`
+* Nintendo Switch - `./fnfr-multi-ve/settings.ini` & `./fnfr-multi-ve/settings`
 
 # Progress
 **Menus** - 96% Complete

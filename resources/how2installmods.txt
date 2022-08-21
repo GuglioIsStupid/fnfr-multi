@@ -1,0 +1,15 @@
+How to install mods
+
+1. Go to the Save directory for FNFR Multi
+    * Windows - `%APPDATA%\fnfr-multi-ve\settings.ini` & `%APPDATA%\fnfr-multi-ve\settings`
+    * macOS - `~/Library/Application Support/fnfr-multi-ve/settings.ini` & `~/Library/Application Support/fnfr-multi-ve/settings`
+    * Linux - `~/.local/share/love/fnfr-multi-ve/settings.ini` & `~/.local/share/love/fnfr-multi-ve/settings`
+    * Nintendo Switch - `./fnfr-multi-ve/settings.ini` & `./fnfr-multi-ve/settings`
+
+In the directory, there should be a folder called "mods".
+If there is no folder, launch the game and close it after
+
+Drag and drop your mods into the folder
+
+To play the mods, go to freeplay and choose "Mod Folder Freeplay"
+After that you should be able to play your mods!
