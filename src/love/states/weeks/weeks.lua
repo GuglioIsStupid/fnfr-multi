@@ -1846,7 +1846,7 @@ return {
 						end
 					end
 					--]]
-					love.graphics.print("Enemy Score: " .. score2 .. "           Boyfriend Score: " .. score, -375, 400+downscrollOffset)
+					love.graphics.print("Enemy Score: " .. score2 .. "                Boyfriend Score: " .. score, -375, 400+downscrollOffset)
 				end
 			else -- Due to resizing the pixel text, I need to reposition it all
 				if not settings.botPlay then
